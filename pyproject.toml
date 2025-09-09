@@ -1,0 +1,13 @@
+[project]
+name = "python-file"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cheroot>=10.0.1",
+    "dmpython>=2.5.22",
+    "pandas>=2.3.2",
+    "pymongo>=4.14.1",
+    "wsgidav>=4.3.3",
+]
