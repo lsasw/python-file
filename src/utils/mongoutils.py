@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 
 
-def process_transformer():
+def process_transformer(tableName):
     client = MongoClient(
         "mongodb://d_eagle3_guangzhou_llt_meas:mongo_Dfdb19c@192.168.0.89:27017/d_eagle3_guangzhou_llt_meas"
     )
@@ -11,7 +11,7 @@ def process_transformer():
     )
     db = client["d_eagle3_guangzhou_llt_meas"]
     db_cim = client_cim["d_eagle3_guangzhou_llt_cim"]
-    collection_source = db["LLT_DISTTRANSFORMERMINCALC20250601"]
+    collection_source = db[tableName]
     collection_gear = db["TEMP_GEAR_INFO"]
     collection_target = db_cim["TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL"]
 
@@ -109,6 +109,7 @@ def process_transformer():
         )
         data_time_sign = results[0]["DATA_TIME_SIGN"] if results else None
         if distribution_line_name and data_time_sign:
+            print("开始删除旧数据...")
             collection_target.delete_many(
                 {
                     "DISTRIBUTION_LINE_NAME": distribution_line_name,
@@ -126,5 +127,8 @@ def process_transformer():
 
 # 主程序入口
 if __name__ == "__main__":
-    process_transformer()
+    for day in range(2, 11):
+        tableName = f"LLT_DISTTRANSFORMERMINCALC202506{day:02d}"
+        print(f"\n===== 正在处理表: {tableName} =====")
+        process_transformer(tableName)
     # process_transformer("PRIVATE")
