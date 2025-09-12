@@ -13,7 +13,7 @@ def process_transformer(tableName):
     db_cim = client_cim["d_eagle3_guangzhou_llt_cim"]
     collection_source = db[tableName]
     collection_gear = db["TEMP_GEAR_INFO"]
-    collection_target = db_cim["TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL"]
+    collection_target = db_cim["TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL_liuqi0912"]
 
     gear_info_map = {}
     for doc in collection_gear.find():
@@ -27,6 +27,7 @@ def process_transformer(tableName):
         {
             "companyName": "HZGDJ",
             "distributionLineName": "10kV东平线F11",
+            "tranName": "横山#2公变",
             # "tranType": tran_type
         }
     )
@@ -79,7 +80,7 @@ def process_transformer(tableName):
                     f"警告：变压器 {tran_id} 缺少有效变比 (gear_type={gear_type}, gear_status={gear_status})，跳过"
                 )
                 continue
-            lowVolt = round(voltage / bianbi * 1000 / 1.732, 2)
+            lowVolt = round(round(voltage,4) / bianbi /1.732 *1000 , 2)
         else:
             voltage_raw = a.get("voltage", 0)
             voltage = 10 if voltage_raw == 0 else voltage_raw
@@ -127,7 +128,7 @@ def process_transformer(tableName):
 
 # 主程序入口
 if __name__ == "__main__":
-    for day in range(2, 11):
+    for day in range(1, 2):
         tableName = f"LLT_DISTTRANSFORMERMINCALC202506{day:02d}"
         print(f"\n===== 正在处理表: {tableName} =====")
         process_transformer(tableName)

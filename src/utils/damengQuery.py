@@ -17,13 +17,13 @@ FROM CIM_DISTMEASUREMENT
 WHERE PSR_ID IN (
     SELECT ID 
     FROM CIM_DISTTRANSFORMER 
-    WHERE COMPANY_ID = '781162051559776256' 
-      AND DISTRIBUTION_LINE_ID = '883352253930082305' 
+    WHERE COMPANY_ID = ?
+      AND DISTRIBUTION_LINE_ID = ?
       AND NAME NOT IN ('课堂水电站（含0.235MW小水电）', '仕礼混凝土专变', '课堂村牧原农牧#2专变')
 );
 """
 
-def query_measurement_ids():
+def query_measurement_ids(company_id, distribution_line_id):
     conn = None
     cursor = None
     try:
@@ -37,7 +37,7 @@ def query_measurement_ids():
         cursor = conn.cursor()
 
         # 执行查询
-        cursor.execute(SQL)
+        cursor.execute(SQL, (company_id, distribution_line_id))
 
         # 获取所有结果
         results = cursor.fetchall()
@@ -60,7 +60,9 @@ def query_measurement_ids():
 
 # 主程序
 if __name__ == "__main__":
-    measurement_ids = query_measurement_ids()
+    company_id = 1  # 替换为实际的公司 ID
+    distribution_line_id = 123  # 替换为实际的配电线路 ID
+    measurement_ids = query_measurement_ids(company_id, distribution_line_id)
     print("查询到的计量点 ID 列表：")
     for mid in measurement_ids:
         print(mid)
