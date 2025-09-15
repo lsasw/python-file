@@ -164,6 +164,12 @@ wheels = [
 ]
 
 [[package]]
+name = "mysql-connector"
+version = "2.2.9"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/28/04/e40098f3730e75bbe36a338926f566ea803550a34fb50535499f4fc4787a/mysql-connector-2.2.9.tar.gz", hash = "sha256:1733e6ce52a049243de3264f1fbc22a852cb35458c4ad739ba88189285efdf32", size = 11852649, upload-time = "2019-04-01T14:40:08.091Z" }
+
+[[package]]
 name = "numpy"
 version = "2.3.2"
 source = { registry = "https://pypi.org/simple" }
@@ -290,6 +296,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "cheroot" },
     { name = "dmpython" },
+    { name = "mysql-connector" },
     { name = "pandas" },
     { name = "pymongo" },
     { name = "redis" },
@@ -301,6 +308,7 @@ dependencies = [
 requires-dist = [
     { name = "cheroot", specifier = ">=10.0.1" },
     { name = "dmpython", specifier = ">=2.5.22" },
+    { name = "mysql-connector", specifier = ">=2.2.9" },
     { name = "pandas", specifier = ">=2.3.2" },
     { name = "pymongo", specifier = ">=4.14.1" },
     { name = "redis", specifier = ">=6.4.0" },

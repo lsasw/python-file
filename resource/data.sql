@@ -61,3 +61,30 @@ SELECT * from LLT_DISTTRANSFORMERMINCALC20250601;
 SELECT * from TEMP_GEAR_INFO;
 
 SELECT * from TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL where TRAN_NAME = '东坡02公变';
+
+
+db.getCollection("TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL").find({ "DATA_TIME_SIGN": "2025-06-10" }).limit(1000).skip(0)
+
+
+
+db.getCollection("LLT_DISTTRANSFORMERMINCALC20250604").find({ $and: [ { "companyId": 781162181876801536 }, { "tranName": "南边园村公变" } ] }
+,{ 
+    "_id": 0,
+    "dataTime": 1 ,       // 排除 _id
+    "tranName": 1,   // 包含 tranName
+    "voltage": 1   // 包含 companyId
+  }
+
+).limit(1000).skip(0);
+db.getCollection("LLT_DISTTRANSFORMERMINCALC20250604").find({ $and: [ { "companyId": 781162051559776256 }, { "tranName": "南边园村公变" } ] }
+,{ 
+    "_id": 0,        // 排除 _id
+     "dataTime": 1 ,       // 排除 _id
+    "tranName": 1,   // 包含 tranName
+    "voltage": 1   // 包含 companyId
+  }
+
+
+).limit(1000).skip(0);
+
+

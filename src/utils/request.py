@@ -32,7 +32,7 @@ cookies = {
 }
 
 def run_batch_requests():
-    for day in range(2, 11):
+    for day in range(8, 11):
         date_str = f"2025-06-{day:02d}"
         now_str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         data = {

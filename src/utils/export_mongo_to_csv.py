@@ -9,8 +9,8 @@ import re
 
 # ==================== 配置区 ====================
 # 修改以下参数以匹配你的 MongoDB 环境
-MONGO_URI = "mongodb://d_eagle3_guangzhou_llt_meas:mongo_Dfdb19c@192.168.0.89:27017/d_eagle3_guangzhou_llt_meas"          # MongoDB 连接地址
-DATABASE_NAME = "d_eagle3_guangzhou_llt_meas"             # 替换为你的数据库名
+MONGO_URI = "mongodb://d_eagle3_guangzhou_llt_cim:mongo_Dfdb19c@192.168.0.89:27017/d_eagle3_guangzhou_llt_cim"          # MongoDB 连接地址
+DATABASE_NAME = "d_eagle3_guangzhou_llt_cim"             # 替换为你的数据库名
 
 # 要导出的集合列表
 COLLECTION_NAMES = [

@@ -13,7 +13,7 @@ def process_transformer(tableName):
     db_cim = client_cim["d_eagle3_guangzhou_llt_cim"]
     collection_source = db[tableName]
     collection_gear = db["TEMP_GEAR_INFO"]
-    collection_target = db_cim["TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL_liuqi0912"]
+    collection_target = db_cim["TEMP_DISTTRANSFORMER_LOWVOLT_DETAIL"]
 
     gear_info_map = {}
     for doc in collection_gear.find():
@@ -27,7 +27,7 @@ def process_transformer(tableName):
         {
             "companyName": "HZGDJ",
             "distributionLineName": "10kV东平线F11",
-            "tranName": "横山#2公变",
+            # "tranName": "横山#2公变",
             # "tranType": tran_type
         }
     )
@@ -119,16 +119,16 @@ def process_transformer(tableName):
             )
         collection_target.insert_many(results)
         print(
-            f"✅ {tran_type} 成功插入 {len(results)} 条记录到 {collection_target.name}"
+            f"✅  成功插入 {len(results)} 条记录到 {collection_target.name}"
         )
     else:
-        print(f"❌ {tran_type} 没有符合条件的数据需要插入")
+        print("❌没有符合条件的数据需要插入")
     client.close()
 
 
 # 主程序入口
 if __name__ == "__main__":
-    for day in range(1, 2):
+    for day in range(2, 11):
         tableName = f"LLT_DISTTRANSFORMERMINCALC202506{day:02d}"
         print(f"\n===== 正在处理表: {tableName} =====")
         process_transformer(tableName)
