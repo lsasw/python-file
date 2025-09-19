@@ -286,3 +286,17 @@ WHERE PSR_ID IN (
 );
 
 db.getCollection("cim_distmeasminute20250801").find({ "measurementId": Long("888827840426168360") }).limit(1000).skip(0)
+UPDATE TEMP_DISTTRAN_RUNDATA
+SET "distline_name" = '10kV客北Ⅱ线F02'
+WHERE
+  "cust_no" = '0308100317307481';
+  
+  SELECT * from TEMP_DISTTRAN_RUNDATA
+  WHERE
+  "cust_no" = '0308100317307481';
+  
+UPDATE TEMP_DISTTRAN_RUNDATA
+SET "dittran_name" = '本立村垦造水田（文山村）#2专变'
+WHERE
+  "cust_no" = '0308100317307481';
+  COMMIT;
