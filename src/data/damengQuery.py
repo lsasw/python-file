@@ -11,6 +11,7 @@ DB_CONFIG = {
 }
 
 # SQL 查询语句
+    #   AND NAME NOT IN ('课堂水电站（含0.235MW小水电）', '仕礼混凝土专变', '课堂村牧原农牧#2专变')
 SQL = """
 SELECT ID 
 FROM CIM_DISTMEASUREMENT 
@@ -19,7 +20,6 @@ WHERE PSR_ID IN (
     FROM CIM_DISTTRANSFORMER 
     WHERE COMPANY_ID = ?
       AND DISTRIBUTION_LINE_ID = ?
-      AND NAME NOT IN ('课堂水电站（含0.235MW小水电）', '仕礼混凝土专变', '课堂村牧原农牧#2专变')
 );
 """
 

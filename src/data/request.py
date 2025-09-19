@@ -2,7 +2,8 @@ import requests
 import json
 import time
 import redis
-
+#  自动执行脚本，定时触发
+# 每天8号、9号、10号，计算前一天的数据
 def get_latest_token_from_redis():
     # 连接 Redis（如有密码请补充）
     r = redis.Redis(host='redis.d-guangzhou-llt-dameng.svc.dfsoft.com.cn', port=6379, db=0,password='df@Redis@2024Op' , decode_responses=True)

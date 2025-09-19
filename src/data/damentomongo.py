@@ -2,7 +2,7 @@ import dmPython
 import pymongo
 from datetime import datetime
 import re
-
+#  运行数据入库脚本
 # -----------------------------
 # 配置信息（请根据实际情况修改）
 # -----------------------------
@@ -152,6 +152,17 @@ def insert_to_mongo(mongo_db, data_list):
     date_str = meas_time[:8]  # YYYYMMDD
     collection_name = f"cim_distmeasminute{date_str}"
     collection = mongo_db[collection_name]
+    # 如果集合不存在，则创建并建立索引
+    if collection_name not in mongo_db.list_collection_names():
+        collection.create_index(
+            [("measurementId", 1), ("measTime", 1)],
+            unique=True,
+            name="uniq_measurementId_measTime"
+        )
+        print(f"✅ 为新集合 {collection_name} 创建唯一索引 (measurementId, measTime)")
+    # 查询当前集合总数
+    existing_count = collection.count_documents({})
+    print(f"📂 当前集合 {collection_name} 已有 {existing_count} 条记录")
     docs = [map_to_mongo_doc(row) for row in data_list]
     if docs:
         # 先删后插入，保证唯一索引数据为最新
@@ -197,9 +208,10 @@ def main(company_id: str, date_str: str):
         line_data = query_dm_line_data(dm_conn, company_id, date_str)
 
         all_data = trans_data + line_data 
-        # all_data = line_data 
+        # all_data =  trans_data
         print(f"📊 查询到配变数据 {len(trans_data)} 条")
         print(f"📊 查询到线路数据 {len(line_data)} 条")
+        print(f"📊 查询到总数据 {len(all_data)} 条")
         
 
         # 去重：根据 measurementId + measTime
@@ -210,6 +222,8 @@ def main(company_id: str, date_str: str):
             if key not in unique_keys:
                 unique_keys.add(key)
                 filtered_data.append(item)
+            # else:
+            #     print(f"⚠️ 发现重复数据，跳过: {key}")
 
         print(f"🔍 去重后共 {len(filtered_data)} 条数据")
 
@@ -227,10 +241,13 @@ def main(company_id: str, date_str: str):
 # 使用示例
 # -----------------------------
 if __name__ == "__main__":
-    COMPANY_ID = "781160878035460096"
-    # DATE = "2025-06-02"
-    # main(COMPANY_ID, DATE)
-    for day in range(3, 11):
-        DATE = f"2025-06-{day:02d}"
-        print(f"\n===== 正在处理日期: {DATE} =====")
-        main(COMPANY_ID, DATE)
+    COMPANY_IDS = [
+        "888795033246355456",
+        "888795261907226624",
+        "888795392035508224"
+    ]
+    for company_id in COMPANY_IDS:
+        for day in range(1, 32):
+            DATE = f"2025-08-{day:02d}"
+            print(f"\n===== 正在处理单位: {company_id} 日期: {DATE} =====")
+            main(company_id, DATE)

@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime, timedelta
-
+# 计算后的低压侧电压
 
 def process_transformer(tableName):
     client = MongoClient(

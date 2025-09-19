@@ -88,3 +88,201 @@ db.getCollection("LLT_DISTTRANSFORMERMINCALC20250604").find({ $and: [ { "company
 ).limit(1000).skip(0);
 
 
+UPDATE TEMP_DISTTRAN_RUNDATA
+SET "distline_name" = '10kV客北Ⅱ线F02'
+WHERE
+  "cust_no" = '0308100317307481';
+  
+  SELECT * from TEMP_DISTTRAN_RUNDATA
+  WHERE
+  "cust_no" = '0308100317355741';
+  
+UPDATE TEMP_DISTTRAN_RUNDATA
+SET "dittran_name" = '本立村垦造水田（招家村）#2专变'
+WHERE
+  "cust_no" = '0308100317368321';
+
+
+
+  --配变运行数据
+SELECT
+  b.ID measurementId,
+  b.NAME,
+  REPLACE(REPLACE(REPLACE(a."data_date", '-', ''), ':', ''), ' ', '') measTime,
+  a."dittran_name",
+  a."pa" P_A,
+  a."pb" P_B,
+  a."pc" P_C,
+  a."p" P,
+  a."p" PQ_P_A,
+  a."p" PQ_P_A_CALC,
+  a."qa" Q_A,
+  a."qb" Q_B,
+  a."qc" Q_C,
+  a."q" Q,
+  a."q" PQ_P_R,
+  a."q" PQ_P_R_CALC
+FROM
+  (
+    SELECT
+      a.*
+      ,
+      b."ia",
+      b."ib",
+      b."ic",
+      b."i",
+      b."ua",
+      b."ub",
+      b."uc"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          (
+            SELECT
+              *,
+              ROW_NUMBER () OVER (PARTITION BY x."cust_no", x."cust_name", x."data_date" ORDER BY x."cust_no") AS rn
+            FROM
+              TEMP_DISTTRAN_RUNDATA x
+            WHERE
+              substr(x."data_date", 0, 11) = '2025-08-01'
+          ) a
+        WHERE
+          rn = 1
+      ) a
+      LEFT JOIN (
+        SELECT
+          *
+        FROM
+          (
+            SELECT
+              *,
+              ROW_NUMBER () OVER (PARTITION BY a."cust_no", a."cust_name", a."data_date" ORDER BY a."cust_no") AS rn
+            FROM
+              TEMP_DISTTRAN_VOL_RUNDATA a
+          ) a
+        WHERE
+          rn = 1
+      ) b ON a."cust_no" = b."cust_no"
+      AND a."data_date" = b."data_date"
+  ) a
+  LEFT  JOIN CIM_DISTMEASUREMENT b ON concat(a."dittran_name", '计量点') = b.NAME
+  AND b.COMPANY_ID = '888415866973573120'
+ORDER BY
+  a."data_date";
+
+
+  UPDATE TEMP_DISTTRAN_RUNDATA
+SET "distline_name" = '10kV客北Ⅱ线F02'
+WHERE
+  "distline_name" IS NULL;
+--线路运行数据
+SELECT
+  b.ID,
+  REPLACE(REPLACE(REPLACE(a."data_date", '-', ''), ':', ''), ' ', ''),
+  a."ua" / 1000
+FROM
+  (
+    SELECT
+      a."data_date",
+      a."ua",
+      a."distline_name"
+    FROM
+      TEMP_DISTLINE_RUNDATA a
+    GROUP BY
+      a."data_date",
+      a."ua",
+      a."distline_name"
+  ) a
+  LEFT JOIN CIM_DISTMEASUREMENT b ON concat(a."distline_name", '计量点') = b.NAME
+WHERE
+  substr(a."data_date", 0, 11) = '2025-08-01'
+  AND b.COMPANY_ID = '888415866973573120'
+ORDER BY
+  a."data_date";
+  
+-- 1111111111
+SELECT
+  *
+FROM
+  CIM_DISTMEASUREMENT;
+--配变运行数据
+SELECT
+  b.ID measurementId,
+  b.NAME,
+  REPLACE(REPLACE(REPLACE(a."data_date", '-', ''), ':', ''), ' ', '') measTime,
+  a."pa" P_A,
+  a."pb" P_B,
+  a."pc" P_C,
+  a."p" P,
+  a."p" PQ_P_A,
+  a."p" PQ_P_A_CALC,
+  a."qa" Q_A,
+  a."qb" Q_B,
+  a."qc" Q_C,
+  a."q" Q,
+  a."q" PQ_P_R,
+  a."q" PQ_P_R_CALC
+FROM
+  (
+    SELECT
+      a.*
+--       ,
+--       b."ia",
+--       b."ib",
+--       b."ic",
+--       b."i",
+--       b."ua",
+--       b."ub",
+--       b."uc"
+    FROM
+      (
+        SELECT
+          *
+        FROM
+          (
+            SELECT
+              *,
+              ROW_NUMBER () OVER (PARTITION BY x."cust_no", x."cust_name", x."data_date" ORDER BY x."cust_no") AS rn
+            FROM
+              TEMP_DISTTRAN_RUNDATA x
+            WHERE
+              substr(x."data_date", 0, 11) = '2025-08-02'
+          ) a
+        WHERE
+          rn = 1
+      ) a
+--       LEFT JOIN (
+--         SELECT
+--           *
+--         FROM
+--           (
+--             SELECT
+--               *,
+--               ROW_NUMBER () OVER (PARTITION BY a."cust_no", a."cust_name", a."data_date" ORDER BY a."cust_no") AS rn
+--             FROM
+--               TEMP_DISTTRAN_VOL_RUNDATA a
+--           ) a
+--         WHERE
+--           rn = 1
+--       ) b ON a."cust_no" = b."cust_no"
+--       AND a."data_date" = b."data_date"
+  ) a
+  LEFT JOIN CIM_DISTMEASUREMENT b ON concat(a."dittran_name", '计量点') = b.NAME
+  AND b.COMPANY_ID = '888415866973573120'
+ORDER BY
+  a."data_date";
+  
+  
+
+  SELECT ID 
+FROM CIM_DISTMEASUREMENT 
+WHERE PSR_ID IN (
+    SELECT id 
+    FROM CIM_DISTTRANSFORMER 
+    WHERE COMPANY_ID = '888795392035508224'
+      AND DISTRIBUTION_LINE_ID = '888827837720842240'
+);
+
+db.getCollection("cim_distmeasminute20250801").find({ "measurementId": Long("888827840426168360") }).limit(1000).skip(0)
